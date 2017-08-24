@@ -10,3 +10,12 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
+*.ipch
+*.db-shm
+*.db-wal
+*.ipch
+.vs/GitTestProject/v15/ipch/AutoPCH/GITTESTPROJECT-88a2aada/CAMERABASE-3af493aa/CAMERABASE.ipch
+*.ipch
+*.ipch
+*.db-wal
+*.db-shm
