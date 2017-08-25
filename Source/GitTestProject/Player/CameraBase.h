@@ -45,6 +45,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UnlockCameraFromPlayer();
 
+	UFUNCTION()
+	void InitCameraMovementKeys();
+
+	UFUNCTION()
+	void DoCameraMovement(const float& DeltaTime);
+
+	UFUNCTION()
+	void MoveCameraX(float Value);
+
+	UFUNCTION()
+	void MoveCameraY(float Value);
+
+	UFUNCTION()
+	void ZoomCamera(float Value);
+
 private:
 	void CorrectActorRotation();
 
@@ -71,6 +86,18 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bLockCameraToPlayerPermanent = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CameraKeyboardMovementSpeed = 500.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector CameraMovementVector = FVector(0.0f);
+
+	UPROPERTY(BlueprintReadWrite)
+	float CameraZoom = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CameraZoomSpeed = 350.0f;
 
 private:
 	bool bLockCameraToPlayer = false;	

@@ -5,6 +5,8 @@
 #include "Utilities/GitCore.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
 ACameraBase::ACameraBase()
@@ -26,12 +28,73 @@ void ACameraBase::BeginPlay()
 	FRotator ActorRotation = GetActorRotation();
 	CorrectActorRotation();
 	SetCameraPitch(ActorRotation.Pitch);
+
+	InitCameraMovementKeys();
+}
+
+void ACameraBase::InitCameraMovementKeys()
+{
+	APlayerController* TmpPlayerController = UGameplayStatics::GetPlayerController(this, 0);
+
+	if (TmpPlayerController)
+	{
+		EnableInput(TmpPlayerController);
+
+		if (InputComponent)
+		{
+			InputComponent->BindAxis("CameraMovementForward", this, &ACameraBase::MoveCameraX);
+			InputComponent->BindAxis("CameraMovementSide", this, &ACameraBase::MoveCameraY);
+			InputComponent->BindAxis("CameraZoom", this, &ACameraBase::ZoomCamera);
+		}
+	}
 }
 
 // Called every frame
 void ACameraBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	DoCameraMovement(DeltaTime);
+}
+
+void ACameraBase::DoCameraMovement(const float& DeltaTime)
+{
+	//Move the camera
+	if (CameraMovementVector.SizeSquared() > 0.0f)
+	{
+		AddActorLocalOffset(CameraMovementVector * DeltaTime * CameraKeyboardMovementSpeed);
+		CameraMovementVector = FVector(0.0f);
+	}
+
+	//Zoom the camera
+	if (CameraZoom != 0.0f)
+	{
+		if (Camera)
+		{
+			//Via the FOV
+			//Camera->FieldOfView += CameraZoom * DeltaTime;
+
+			//Via the ArmLength
+			SpringArm->TargetArmLength -= CameraZoom * DeltaTime;
+
+			CameraZoom = 0.0f;
+		}
+	}
+}
+
+void ACameraBase::MoveCameraX(float Value)
+{
+	CameraMovementVector.X =  Value;
+}
+
+void ACameraBase::MoveCameraY(float Value)
+{
+	CameraMovementVector.Y =  Value;
+}
+
+void ACameraBase::ZoomCamera(float Value)
+{
+	CameraZoom = CameraZoomSpeed * Value;
 }
 
 void ACameraBase::BecomeViewTarget(APlayerController * PC)
