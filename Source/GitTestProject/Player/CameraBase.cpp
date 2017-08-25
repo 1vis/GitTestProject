@@ -32,6 +32,16 @@ void ACameraBase::BeginPlay()
 	InitCameraMovementKeys();
 }
 
+void ACameraBase::AttachCameraToObject(AActor* targetActor)
+{
+	SetActorLocation(targetActor->GetActorLocation());
+}
+
+void ACameraBase::ResetCameraRotationToDefault()
+{
+	
+}
+
 void ACameraBase::InitCameraMovementKeys()
 {
 	APlayerController* TmpPlayerController = UGameplayStatics::GetPlayerController(this, 0);
@@ -72,12 +82,13 @@ void ACameraBase::DoCameraMovement(const float& DeltaTime)
 		if (Camera)
 		{
 			//Via the FOV
-			//Camera->FieldOfView += CameraZoom * DeltaTime;
+			/*if ((Camera->FieldOfView + CameraZoom * DeltaTime >= CameraLowestZoomValue)&&(Camera->FieldOfView + CameraZoom * DeltaTime <= CameraHighestZoomValue))
+				Camera->FieldOfView += CameraZoom * DeltaTime;*/
 
 			//Via the ArmLength
-			if (((SpringArm->TargetArmLength - (CameraZoom * DeltaTime) > CameraLowestZoomValue)) && ((SpringArm->TargetArmLength - (CameraZoom * DeltaTime) < CameraHighestZoomValue)))
+			if (((SpringArm->TargetArmLength + (CameraZoom * DeltaTime) > CameraLowestZoomValue)) && ((SpringArm->TargetArmLength + (CameraZoom * DeltaTime) < CameraHighestZoomValue)))
 			{
-				SpringArm->TargetArmLength -= CameraZoom * DeltaTime;
+				SpringArm->TargetArmLength += CameraZoom * DeltaTime;
 
 				CameraZoom = 0.0f;
 			}
