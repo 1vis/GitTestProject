@@ -99,6 +99,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float CameraZoomSpeed = 350.0f;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CameraLowestZoomValue = 100.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CameraHighestZoomValue = 1000.0f;
+
 private:
 	bool bLockCameraToPlayer = false;	
 };

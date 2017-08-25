@@ -75,9 +75,12 @@ void ACameraBase::DoCameraMovement(const float& DeltaTime)
 			//Camera->FieldOfView += CameraZoom * DeltaTime;
 
 			//Via the ArmLength
-			SpringArm->TargetArmLength -= CameraZoom * DeltaTime;
+			if (((SpringArm->TargetArmLength - (CameraZoom * DeltaTime) > CameraLowestZoomValue)) && ((SpringArm->TargetArmLength - (CameraZoom * DeltaTime) < CameraHighestZoomValue)))
+			{
+				SpringArm->TargetArmLength -= CameraZoom * DeltaTime;
 
-			CameraZoom = 0.0f;
+				CameraZoom = 0.0f;
+			}
 		}
 	}
 }
