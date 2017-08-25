@@ -60,6 +60,12 @@ public:
 	UFUNCTION()
 	void ZoomCamera(float Value);
 
+	UFUNCTION()
+	void AttachCameraToObject(AActor* targetActor);
+
+	UFUNCTION()
+	void ResetCameraRotationToDefault();
+
 private:
 	void CorrectActorRotation();
 
@@ -98,6 +104,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float CameraZoomSpeed = 350.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CameraLowestZoomValue = 650.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CameraHighestZoomValue = 1100.0f;
 
 private:
 	bool bLockCameraToPlayer = false;	

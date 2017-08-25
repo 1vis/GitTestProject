@@ -19,3 +19,11 @@ Saved
 *.ipch
 *.db-wal
 *.db-shm
+*.ini
+Config/DefaultInput.ini
+*.db-wal
+*.db-shm
+*.ini
+Content/Levels/TestLevel.umap
+Source/GitTestProject/Player/CameraBase.cpp
+Source/GitTestProject/Player/CameraBase.h

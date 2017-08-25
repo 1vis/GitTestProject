@@ -18,6 +18,9 @@ public:
 	UFUNCTION(BlueprintPure, meta = (Category = "GitStatics"))
 	static FVector2D GetViewportSize();
 
+	UFUNCTION(BlueprintPure, meta = (Category = "GitStatics"))
+	static FVector2D GetMousePosition(APlayerController* PC);
+
 	
 	
 };
