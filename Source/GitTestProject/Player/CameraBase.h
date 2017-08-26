@@ -91,7 +91,7 @@ public:
 	bool bLockCameraToPlayerPermanent = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float CameraKeyboardMovementSpeed = 1000.0f;
+	float CameraKeyboardMovementSpeed = 2000.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector CameraMovementVector = FVector(0.0f);

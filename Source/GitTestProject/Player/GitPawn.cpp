@@ -39,7 +39,7 @@ void AGitPawn::NotifyActorOnReleased(FKey ButtonReleased)
 {
 	Super::NotifyActorOnReleased(ButtonReleased);	
 
-	/*AGitPlayerController* GitPC = UGitStatics::GetGitPlayerController(this);
+	AGitPlayerController* GitPC = UGitStatics::GetGitPlayerController(this);
 	if (GitPC == nullptr)
 	{
 		PRINTC("PlayerController is not GitPlayerController. (GitCharacter, NotifyActorOnReleased)", FColor::Red);
@@ -56,7 +56,7 @@ void AGitPawn::NotifyActorOnReleased(FKey ButtonReleased)
 	}
 	else if (bLeftControlDown)
 	{
-		int32 Count = GitPC->SelectedPawns.RemoveAll(this);
+		int32 Count = GitPC->SelectedPawns.Remove(this);
 		if (Count > 0)
 		{
 			PRINTC(this->GetName() + " removed " + FString::FromInt(Count) + "x", FColor::Yellow);
@@ -67,7 +67,7 @@ void AGitPawn::NotifyActorOnReleased(FKey ButtonReleased)
 		GitPC->SelectedPawns.Empty();
 		int32 Index = GitPC->SelectedPawns.AddUnique(this);
 		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
-	}*/
+	}
 }
 
 void AGitPawn::SetDestinationToMouseCursor()
