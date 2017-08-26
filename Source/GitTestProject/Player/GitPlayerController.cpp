@@ -6,6 +6,7 @@
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "Utilities/GitStatics.h"
 #include "Player/GitCharacter.h"
+#include "Utilities/GitCore.h"
 
 
 AGitPlayerController::AGitPlayerController()
@@ -21,27 +22,29 @@ void AGitPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Set ActiveCamera to the first ABaseCamera found in level.
 	if (ActiveCamera == nullptr)
 	{
 		TArray<AActor*> CamerasInLevel;
-		UGameplayStatics::GetAllActorsOfClass(this, TSubclassOf<ACameraBase>(), CamerasInLevel);
+		UGameplayStatics::GetAllActorsOfClass(this, ACameraBase::StaticClass(), CamerasInLevel);
 
 		if (CamerasInLevel.Num() > 0)
 		{
-			ActiveCamera = Cast<ACameraBase>(CamerasInLevel[0]);
-		}
+			ActiveCamera = Cast<ACameraBase>(CamerasInLevel[0]);		
+		}	
 	}
 	
-	if (SelectedPawn == nullptr)
-	{
-		TArray<AActor*> GitCharactersInLevel;
-		UGameplayStatics::GetAllActorsOfClass(this, TSubclassOf<AGitCharacter>(), GitCharactersInLevel);
+	/// Set SelectedPawn to the first AGitCharacter found in level.
+	//if (SelectedPawn == nullptr)
+	//{
+	//	TArray<AActor*> GitCharactersInLevel;
+	//	UGameplayStatics::GetAllActorsOfClass(this, AGitCharacter::StaticClass(), GitCharactersInLevel);
 
-		if (GitCharactersInLevel.Num() > 0)
-		{
-			SelectedPawn = Cast<AGitCharacter>(GitCharactersInLevel[0]);
-		}
-	}	
+	//	if (GitCharactersInLevel.Num() > 0)
+	//	{
+	//		SelectedPawn = Cast<AGitCharacter>(GitCharactersInLevel[0]);
+	//	}
+	//}	
 }
 
 void AGitPlayerController::Tick(float DeltaTime)
@@ -52,6 +55,29 @@ void AGitPlayerController::Tick(float DeltaTime)
 void AGitPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();	
+
+	InputComponent->BindAction("MoveToDestination", IE_Released, this, &AGitPlayerController::MoveSelectedPawnToDestination);
+}
+
+void AGitPlayerController::MoveSelectedPawnToDestination()
+{
+	if (SelectedPawn)
+	{
+		AGitCharacter* GitCharacter = Cast<AGitCharacter>(SelectedPawn);
+		if (GitCharacter)
+		{
+			GitCharacter->SetDestinationToMouseCursor();
+			GitCharacter->MoveGitCharacterToDestination();
+		}
+		else
+		{
+			PRINTC("Selected Pawn isn't GitCharacter. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
+		}
+	}
+	else
+	{
+		PRINTC("No pawn is selected. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
+	}
 }
 
 

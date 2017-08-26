@@ -30,7 +30,16 @@ public:
 	virtual void NotifyActorOnReleased(FKey ButtonReleased) override;
 
 	UFUNCTION(BlueprintCallable)
-	FVector GetDestination();
+	void SetDestinationToMouseCursor();
+
+	UFUNCTION(BlueprintPure)
+	FVector GetDestination() const;
+
+	void MoveGitCharacterToDestination();
+
+public:
+	UPROPERTY(VisibleDefaultsOnly)
+	UStaticMeshComponent* ClickableMesh;
 
 private:	
 	FVector Destination;

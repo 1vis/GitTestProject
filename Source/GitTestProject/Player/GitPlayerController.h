@@ -25,6 +25,8 @@ public:
 
 	virtual void SetupInputComponent() override;
 
+	void MoveSelectedPawnToDestination();
+
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class ACameraBase* ActiveCamera = nullptr;
