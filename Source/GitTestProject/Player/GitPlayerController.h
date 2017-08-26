@@ -29,8 +29,8 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class ACameraBase* ActiveCamera = nullptr;
+	class ACameraBase* ActiveCamera = nullptr;	
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class APawn* SelectedPawn = nullptr;	
+	TArray<APawn*> SelectedPawns;
 };

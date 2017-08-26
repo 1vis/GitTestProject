@@ -81,17 +81,17 @@ public:
 
 	// how fast will camera move when cursor is on the edge of the screen
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float CameraMoveSpeed = 5.0f;
+	float CameraMoveSpeed = 500.0f;
 
 	// offset from edge of the screen in pixels
 	UPROPERTY(EditDefaultsOnly)
-	float BorderMargin = 10.0f;
+	float BorderMargin = 20.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bLockCameraToPlayerPermanent = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float CameraKeyboardMovementSpeed = 500.0f;
+	float CameraKeyboardMovementSpeed = 1000.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector CameraMovementVector = FVector(0.0f);

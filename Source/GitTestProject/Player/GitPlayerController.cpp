@@ -52,26 +52,29 @@ void AGitPlayerController::SetupInputComponent()
 
 void AGitPlayerController::MoveSelectedPawnToDestination()
 {
-	if (SelectedPawn)
+	for (auto& SelectedPawn : SelectedPawns)
 	{
-		if (AGitCharacter* GitCharacter = Cast<AGitCharacter>(SelectedPawn))
+		if (SelectedPawn)
 		{
-			GitCharacter->SetDestinationToMouseCursor();
-			GitCharacter->MoveGitCharacterToDestination();
-		}
-		else if(AGitPawn* GitPawn = Cast<AGitPawn>(SelectedPawn))
-		{
-			GitPawn->SetDestinationToMouseCursor();
-			GitPawn->MoveGitPawnToDestination();
+			if (AGitCharacter* GitCharacter = Cast<AGitCharacter>(SelectedPawn))
+			{
+				GitCharacter->SetDestinationToMouseCursor();
+				GitCharacter->MoveGitCharacterToDestination();
+			}
+			else if (AGitPawn* GitPawn = Cast<AGitPawn>(SelectedPawn))
+			{
+				GitPawn->SetDestinationToMouseCursor();
+				GitPawn->MoveGitPawnToDestination();
+			}
+			else
+			{
+				PRINTC("Selected Pawn isn't GitPawn/GitCharacter. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
+			}
 		}
 		else
 		{
-			PRINTC("Selected Pawn isn't GitPawn/GitCharacter. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
+			PRINTC("No pawn is selected. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
 		}
-	}
-	else
-	{
-		PRINTC("No pawn is selected. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
 	}
 }
 

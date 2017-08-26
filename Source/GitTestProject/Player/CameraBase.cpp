@@ -131,11 +131,18 @@ void ACameraBase::UpdateCamera()
 		return;
 	}	
 	
-	if(GitPC->SelectedPawn)
+	if(GitPC->SelectedPawns.Num() > 0)
 	{
+
+		TArray<AActor*> DowncastedArray;
+		for (const auto& Pawn : GitPC->SelectedPawns)
+		{
+			DowncastedArray.Add(Pawn);
+		}		
+		const FVector AverageLocation = UGameplayStatics::GetActorArrayAverageLocation(DowncastedArray);
 		if (bLockCameraToPlayer || bLockCameraToPlayerPermanent)
 		{
-			SetActorLocation(GitPC->SelectedPawn->GetActorLocation());
+			SetActorLocation(AverageLocation);
 		}		
 	}
 	 
@@ -144,13 +151,14 @@ void ACameraBase::UpdateCamera()
 	float MouseX = -1.0f;
 	float MouseY = -1.0f;
 	PlayerController->GetMousePosition(MouseX, MouseY);
-	FVector2D ViewportSize = UGitStatics::GetViewportSize();
+	const FVector2D ViewportSize = UGitStatics::GetViewportSize();
 	
-	float UpperBorder = 0.0f + BorderMargin;
-	float LowerBorder = ViewportSize.Y - BorderMargin;
-	float LeftBorder = 0.0f + BorderMargin;
-	float RightBorder = ViewportSize.X - BorderMargin;	
+	const float UpperBorder = 0.0f + BorderMargin;
+	const float LowerBorder = ViewportSize.Y - BorderMargin;
+	const float LeftBorder = 0.0f + BorderMargin;
+	const float RightBorder = ViewportSize.X - BorderMargin;	
 
+	const float DeltaTime = GetWorld()->GetDeltaSeconds();
 	if(MouseX <= LeftBorder)
 	{
 		if(MouseY <= UpperBorder)
@@ -158,7 +166,7 @@ void ACameraBase::UpdateCamera()
 			// move camera up and left		
 			FVector Direction(1.0f, -1.0f, 0.0f);
 			Direction = Direction.GetSafeNormal();
-			Direction *= CameraMoveSpeed;
+			Direction *= CameraMoveSpeed * DeltaTime;
 			AddActorLocalOffset(Direction);
 		}
 		else if (MouseY >= LowerBorder)
@@ -166,7 +174,7 @@ void ACameraBase::UpdateCamera()
 			// move camera down and left			
 			FVector Direction(-1.0f, -1.0f, 0.0f);
 			Direction = Direction.GetSafeNormal();
-			Direction *= CameraMoveSpeed;
+			Direction *= CameraMoveSpeed * DeltaTime;
 			AddActorLocalOffset(Direction);
 		}
 		else
@@ -174,7 +182,7 @@ void ACameraBase::UpdateCamera()
 			// move camera left		
 			FVector Direction(0.0f, -1.0f, 0.0f);
 			Direction = Direction.GetSafeNormal();
-			Direction *= CameraMoveSpeed;
+			Direction *= CameraMoveSpeed * DeltaTime;
 			AddActorLocalOffset(Direction);
 		}
 	}
@@ -185,7 +193,7 @@ void ACameraBase::UpdateCamera()
 			// move camera up and right		
 			FVector Direction(1.0f, 1.0f, 0.0f);
 			Direction = Direction.GetSafeNormal();
-			Direction *= CameraMoveSpeed;
+			Direction *= CameraMoveSpeed * DeltaTime;;
 			AddActorLocalOffset(Direction);
 		}
 		else if (MouseY >= LowerBorder)
@@ -193,7 +201,7 @@ void ACameraBase::UpdateCamera()
 			// move camera down and right						
 			FVector Direction(-1.0f, 1.0f, 0.0f);
 			Direction = Direction.GetSafeNormal();
-			Direction *= CameraMoveSpeed;
+			Direction *= CameraMoveSpeed * DeltaTime;
 			AddActorLocalOffset(Direction);
 		}
 		else
@@ -201,7 +209,7 @@ void ACameraBase::UpdateCamera()
 			// move camera right					
 			FVector Direction(0.0f, 1.0f, 0.0f);
 			Direction = Direction.GetSafeNormal();
-			Direction *= CameraMoveSpeed;
+			Direction *= CameraMoveSpeed * DeltaTime;
 			AddActorLocalOffset(Direction);
 		}
 	}
@@ -210,7 +218,7 @@ void ACameraBase::UpdateCamera()
 		// move camera up			
 		FVector Direction(1.0f, 0.0f, 0.0f);
 		Direction = Direction.GetSafeNormal();
-		Direction *= CameraMoveSpeed;
+		Direction *= CameraMoveSpeed * DeltaTime;
 		AddActorLocalOffset(Direction);
 	}
 	else if (MouseY >= LowerBorder)
@@ -218,7 +226,7 @@ void ACameraBase::UpdateCamera()
 		// move camera down		
 		FVector Direction(-1.0f, 0.0f, 0.0f);
 		Direction = Direction.GetSafeNormal();
-		Direction *= CameraMoveSpeed;
+		Direction *= CameraMoveSpeed * DeltaTime;
 		AddActorLocalOffset(Direction);
 	}	
 }

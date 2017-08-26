@@ -9,7 +9,7 @@
 #include "Player/GitPlayerController.h"
 #include "Player/GitAIController.h"
 #include "Player/GitCharacter.h"
-
+#include "Kismet/KismetInputLibrary.h"
 
 // Sets default values
 AGitCharacter::AGitCharacter()
@@ -48,9 +48,36 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 {
 	Super::NotifyActorOnReleased(ButtonReleased);
 
-	AGitPlayerController* PC = UGitStatics::GetGitPlayerController(this);
-	PC->SelectedPawn = this;
-	PRINTC(PC->SelectedPawn->GetName() + " selected.", FColor::Yellow);
+	AGitPlayerController* GitPC = UGitStatics::GetGitPlayerController(this);
+	if (GitPC == nullptr)
+	{
+		PRINTC("PlayerController is not GitPlayerController. (GitCharacter, NotifyActorOnReleased)", FColor::Red);
+		return;
+	}
+
+	bool bLeftShiftDown = GitPC->GetInputAnalogKeyState(EKeys::LeftShift);
+	bool bLeftControlDown = GitPC->GetInputAnalogKeyState(EKeys::LeftControl);
+
+	if (bLeftShiftDown)
+	{		
+		int32 Index = GitPC->SelectedPawns.AddUnique(this);
+		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
+	}
+	else if (bLeftControlDown)
+	{
+		int32 Count = GitPC->SelectedPawns.Remove(this);
+		if (Count > 0)
+		{
+			PRINTC(this->GetName() + " removed " + FString::FromInt(Count) + "x", FColor::Yellow);
+		}	
+	}
+	else
+	{
+		GitPC->SelectedPawns.Empty();
+		int32 Index = GitPC->SelectedPawns.AddUnique(this);
+		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
+	}
+	
 }
 
 void AGitCharacter::SetDestinationToMouseCursor()
