@@ -21,6 +21,9 @@ public:
 	UFUNCTION(BlueprintPure, meta = (Category = "GitStatics"))
 	static FVector2D GetMousePosition(APlayerController* PC);
 
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", Category = "GitStatics"))
+	static class AGitPlayerController* GetGitPlayerController(const UObject* WorldContextObject, int32 Index = 0);
+
 	
 	
 };

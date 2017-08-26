@@ -3,6 +3,10 @@
 #include "GitCharacter.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Utilities/GitCore.h"
+#include "Utilities/GitStatics.h"
+#include "Player/CameraBase.h"
+#include "Player/GitPlayerController.h"
 
 
 // Sets default values
@@ -40,21 +44,20 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 }
 
 
-FVector AGitCharacter::GetDestination(UCameraComponent* Camera)
+FVector AGitCharacter::GetDestination()
 {
-	if (!Camera)
-	{
-		return FVector();
-	}
-
-	check(Camera && "Camera not found. (AGitCharacter)");
+	AGitPlayerController* PC = UGitStatics::GetGitPlayerController(this);
+	if (PC->ActiveCamera == nullptr)
+	{	
+		PRINTC("Camera not found. (GitCharacter, GetDestination())", FColor::Red);
+		return FVector::ZeroVector;
+	}	
 		
-	FVector WorldLocation,WorldDirection;
-	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	FVector WorldLocation,WorldDirection;	
 	PC->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
 	WorldDirection *= 10'000.0f;	
 		
-	FVector TraceStart = Camera->GetComponentLocation();
+	FVector TraceStart = PC->ActiveCamera->Camera->GetComponentLocation();
 	FVector TraceEnd = TraceStart + WorldDirection;
 		
 	FHitResult HitResult;

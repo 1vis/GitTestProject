@@ -3,6 +3,8 @@
 #include "GitStatics.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Engine.h"
+#include "Player/GitPlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 FVector2D UGitStatics::GetViewportSize()
 {
@@ -16,4 +18,10 @@ FVector2D UGitStatics::GetMousePosition(APlayerController * PC)
 	PC->GetMousePosition(MouseX, MouseY);
 
 	return FVector2D(MouseX, MouseY);
+}
+
+AGitPlayerController * UGitStatics::GetGitPlayerController(const UObject* WorldContextObject, int32 Index /*= 0 */)
+{
+	APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, Index);
+	return Cast<AGitPlayerController>(PC);
 }

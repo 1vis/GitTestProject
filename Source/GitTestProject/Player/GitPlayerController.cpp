@@ -8,18 +8,40 @@
 #include "Player/GitCharacter.h"
 
 
+AGitPlayerController::AGitPlayerController()
+{
+	bAllowTickBeforeBeginPlay = false;
+	bShowMouseCursor = true;
+	bEnableTouchEvents = false;
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+}
+
 void AGitPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TArray<AActor*> CamerasInLevel;
-	UGameplayStatics::GetAllActorsOfClass(this, TSubclassOf<ACameraBase>(), CamerasInLevel);
-
-	if (ACameraBase* Camera = Cast<ACameraBase>(CamerasInLevel[0]))
+	if (ActiveCamera == nullptr)
 	{
-		ActiveCamera = Camera;
-	}	
+		TArray<AActor*> CamerasInLevel;
+		UGameplayStatics::GetAllActorsOfClass(this, TSubclassOf<ACameraBase>(), CamerasInLevel);
 
+		if (CamerasInLevel.Num() > 0)
+		{
+			ActiveCamera = Cast<ACameraBase>(CamerasInLevel[0]);
+		}
+	}
+	
+	if (SelectedPawn == nullptr)
+	{
+		TArray<AActor*> GitCharactersInLevel;
+		UGameplayStatics::GetAllActorsOfClass(this, TSubclassOf<AGitCharacter>(), GitCharactersInLevel);
+
+		if (GitCharactersInLevel.Num() > 0)
+		{
+			SelectedPawn = Cast<AGitCharacter>(GitCharactersInLevel[0]);
+		}
+	}	
 }
 
 void AGitPlayerController::Tick(float DeltaTime)
@@ -29,34 +51,7 @@ void AGitPlayerController::Tick(float DeltaTime)
 
 void AGitPlayerController::SetupInputComponent()
 {
-	Super::SetupInputComponent();
-
-	InputComponent->BindAction("SelectObject", IE_Pressed, this, &AGitPlayerController::On_LMB_Pressed).bConsumeInput = false;
-	InputComponent->BindAction("MoveToLocation", IE_Pressed, this, &AGitPlayerController::On_RMB_Pressed).bConsumeInput = false;
+	Super::SetupInputComponent();	
 }
 
-void AGitPlayerController::On_LMB_Pressed()
-{
-	//AActor* SelectedActor = GetClickedOnActor();	
-}
 
-void AGitPlayerController::On_RMB_Pressed()
-{	
-}
-
-//AActor* AGitPlayerController::GetClickedOnActor()
-//{
-//	check(ActiveCamera && "Active camera not found. (GitPlayerController)");
-//	
-//	FVector WorldLocation,WorldDirection;
-//	DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
-//	WorldDirection *= 10'000.0f;	
-//	
-//	FVector TraceStart = ActiveCamera->GetActorLocation();
-//	FVector TraceEnd = TraceStart + WorldDirection;
-//	
-//	FHitResult HitResult;
-//	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
-//
-//	return HitResult.GetActor();
-//}

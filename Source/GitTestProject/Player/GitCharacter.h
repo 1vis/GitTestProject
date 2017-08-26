@@ -30,7 +30,7 @@ public:
 	virtual void NotifyActorOnReleased(FKey ButtonReleased) override;
 
 	UFUNCTION(BlueprintCallable)
-	FVector GetDestination(class UCameraComponent* Camera);
+	FVector GetDestination();
 
 private:	
 	FVector Destination;

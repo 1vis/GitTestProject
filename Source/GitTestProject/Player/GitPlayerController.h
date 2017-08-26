@@ -14,6 +14,9 @@ class GITTESTPROJECT_API AGitPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	AGitPlayerController();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -22,17 +25,10 @@ public:
 
 	virtual void SetupInputComponent() override;
 
-	virtual void On_LMB_Pressed();
-
-	virtual void On_RMB_Pressed();
-
-	//AActor* GetClickedOnActor();
-	
 public:
-	UPROPERTY(BlueprintReadWrite)
-	class ACameraBase* ActiveCamera;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class ACameraBase* ActiveCamera = nullptr;
 
-
-	
-	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class APawn* SelectedPawn = nullptr;	
 };
