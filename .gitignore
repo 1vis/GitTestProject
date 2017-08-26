@@ -27,3 +27,5 @@ Config/DefaultInput.ini
 Content/Levels/TestLevel.umap
 Source/GitTestProject/Player/CameraBase.cpp
 Source/GitTestProject/Player/CameraBase.h
+Content/StarterContent/Shapes/CapsuleWithCollsion.uasset
+Content/Player/StaticMesh/CapsuleWithCollsion.uasset
