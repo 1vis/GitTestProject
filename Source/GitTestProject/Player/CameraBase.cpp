@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Player/GitPlayerController.h"
 
 // Sets default values
 ACameraBase::ACameraBase()
@@ -123,16 +124,18 @@ void ACameraBase::EndViewTarget(APlayerController * PC)
 
 void ACameraBase::UpdateCamera()
 {
+	AGitPlayerController* GitPC = Cast<AGitPlayerController>(UGitStatics::GetGitPlayerController(this));
+
 	if(!PlayerController)
 	{
 		return;
-	}
-
-	if(Player)
+	}	
+	
+	if(GitPC->SelectedPawn)
 	{
 		if (bLockCameraToPlayer || bLockCameraToPlayerPermanent)
 		{
-			SetActorLocation(Player->GetActorLocation());
+			SetActorLocation(GitPC->SelectedPawn->GetActorLocation());
 		}		
 	}
 	 

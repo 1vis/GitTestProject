@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "GitCharacter.generated.h"
+#include "GameFramework/Pawn.h"
+#include "GitPawn.generated.h"
 
-UCLASS(meta = (ShortTooltip = "A Character that can be 'controlled' when selected with left mouse button."))
-class GITTESTPROJECT_API AGitCharacter : public ACharacter
+UCLASS(meta = (ShortTooltip = "A Pawn that can be 'controlled' when selected with left mouse button."))
+class GITTESTPROJECT_API AGitPawn : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	AGitCharacter();
+	// Sets default values for this pawn's properties
+	AGitPawn();
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,8 +35,11 @@ public:
 	UFUNCTION(BlueprintPure)
 	FVector GetDestination() const;
 
-	void MoveGitCharacterToDestination();	
+	void MoveGitPawnToDestination();
 
-private:	
+private:
 	FVector Destination;	
 };
+
+
+

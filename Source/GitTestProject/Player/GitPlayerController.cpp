@@ -7,6 +7,7 @@
 #include "Utilities/GitStatics.h"
 #include "Player/GitCharacter.h"
 #include "Utilities/GitCore.h"
+#include "Player/GitPawn.h"
 
 
 AGitPlayerController::AGitPlayerController()
@@ -15,7 +16,7 @@ AGitPlayerController::AGitPlayerController()
 	bShowMouseCursor = true;
 	bEnableTouchEvents = false;
 	bEnableClickEvents = true;
-	bEnableMouseOverEvents = true;
+	bEnableMouseOverEvents = true;	
 }
 
 void AGitPlayerController::BeginPlay()
@@ -33,18 +34,8 @@ void AGitPlayerController::BeginPlay()
 			ActiveCamera = Cast<ACameraBase>(CamerasInLevel[0]);		
 		}	
 	}
-	
-	/// Set SelectedPawn to the first AGitCharacter found in level.
-	//if (SelectedPawn == nullptr)
-	//{
-	//	TArray<AActor*> GitCharactersInLevel;
-	//	UGameplayStatics::GetAllActorsOfClass(this, AGitCharacter::StaticClass(), GitCharactersInLevel);
 
-	//	if (GitCharactersInLevel.Num() > 0)
-	//	{
-	//		SelectedPawn = Cast<AGitCharacter>(GitCharactersInLevel[0]);
-	//	}
-	//}	
+	SetViewTarget(ActiveCamera);
 }
 
 void AGitPlayerController::Tick(float DeltaTime)
@@ -63,15 +54,19 @@ void AGitPlayerController::MoveSelectedPawnToDestination()
 {
 	if (SelectedPawn)
 	{
-		AGitCharacter* GitCharacter = Cast<AGitCharacter>(SelectedPawn);
-		if (GitCharacter)
+		if (AGitCharacter* GitCharacter = Cast<AGitCharacter>(SelectedPawn))
 		{
 			GitCharacter->SetDestinationToMouseCursor();
 			GitCharacter->MoveGitCharacterToDestination();
 		}
+		else if(AGitPawn* GitPawn = Cast<AGitPawn>(SelectedPawn))
+		{
+			GitPawn->SetDestinationToMouseCursor();
+			GitPawn->MoveGitPawnToDestination();
+		}
 		else
 		{
-			PRINTC("Selected Pawn isn't GitCharacter. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
+			PRINTC("Selected Pawn isn't GitPawn/GitCharacter. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
 		}
 	}
 	else

@@ -71,16 +71,13 @@ private:
 
 public:
 	UPROPERTY(VisibleDefaultsOnly)
-	class USpringArmComponent* SpringArm;
+	class USpringArmComponent* SpringArm = nullptr;
 
 	UPROPERTY(VisibleDefaultsOnly)
-	class UCameraComponent* Camera;	
+	class UCameraComponent* Camera = nullptr;
 	
 	UPROPERTY()
-	APlayerController* PlayerController;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	AActor* Player;
+	APlayerController* PlayerController = nullptr;
 
 	// how fast will camera move when cursor is on the edge of the screen
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

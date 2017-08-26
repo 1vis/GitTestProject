@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "GitCharacter.h"
+#include "GitPawn.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utilities/GitCore.h"
@@ -8,43 +8,34 @@
 #include "Player/CameraBase.h"
 #include "Player/GitPlayerController.h"
 #include "Player/GitAIController.h"
-#include "Player/GitCharacter.h"
-
 
 // Sets default values
-AGitCharacter::AGitCharacter()
+AGitPawn::AGitPawn()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationRoll = false;
-
-	AutoPossessPlayer = EAutoReceiveInput::Disabled;
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;	
 }
 
 // Called when the game starts or when spawned
-void AGitCharacter::BeginPlay()
-{	
-	Destination = GetActorLocation();
-
+void AGitPawn::BeginPlay()
+{
 	Super::BeginPlay();	
 }
 
 // Called every frame
-void AGitCharacter::Tick(float DeltaTime)
+void AGitPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
 // Called to bind functionality to input
-void AGitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AGitPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
+
+void AGitPawn::NotifyActorOnReleased(FKey ButtonReleased)
 {
 	Super::NotifyActorOnReleased(ButtonReleased);
 
@@ -53,12 +44,12 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 	PRINTC(PC->SelectedPawn->GetName() + " selected.", FColor::Yellow);
 }
 
-void AGitCharacter::SetDestinationToMouseCursor()
+void AGitPawn::SetDestinationToMouseCursor()
 {
 	AGitPlayerController* PC = UGitStatics::GetGitPlayerController(this);
 	if (PC->ActiveCamera == nullptr)
 	{
-		PRINTC("Camera not found. (GitCharacter, GetDestination())", FColor::Red);
+		PRINTC("Camera not found. (GitPawn, GetDestination())", FColor::Red);
 		return;
 	}	
 		
@@ -78,12 +69,12 @@ void AGitCharacter::SetDestinationToMouseCursor()
 	}	
 }
 
-FVector AGitCharacter::GetDestination() const
+FVector AGitPawn::GetDestination() const
 {
 	return Destination;
 }
 
-void AGitCharacter::MoveGitCharacterToDestination()
+void AGitPawn::MoveGitPawnToDestination()
 {
 	AGitAIController* GitAIController = Cast<AGitAIController>(GetController());
 	
@@ -93,6 +84,7 @@ void AGitCharacter::MoveGitCharacterToDestination()
 	}	
 	else
 	{
-		PRINTC("Wrong AI Controller (GitCharacter, MoveGitCharacterToDestination())", FColor::Red);
+		PRINTC("Wrong AI Controller (GitPawn, MoveGitCharacterToDestination())", FColor::Red);
 	}
 }
+
