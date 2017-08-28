@@ -32,6 +32,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetDestinationToMouseCursor();
 
+	UFUNCTION(BlueprintCallable)
+	bool HasAssignedPanel();
+
+	UFUNCTION(BlueprintCallable)
+	void AssignPanel();
+
 	UFUNCTION(BlueprintPure)
 	FVector GetDestination() const;
 
@@ -39,4 +45,7 @@ public:
 
 private:	
 	FVector Destination;	
+
+	UPROPERTY()
+		bool AssignedPanel = false;
 };
