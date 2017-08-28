@@ -78,4 +78,7 @@ void AGitPlayerController::MoveSelectedPawnToDestination()
 	}
 }
 
-
+void AGitPlayerController::HighlightCharacterPanels(TArray<APawn*> SelectedActors)
+{
+	UpdateCharacterPanelsFunction.Broadcast(SelectedActors);
+}
