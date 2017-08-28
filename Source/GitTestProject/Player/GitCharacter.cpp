@@ -55,15 +55,15 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 		return;
 	}
 
-	bool bLeftShiftDown = GitPC->GetInputAnalogKeyState(EKeys::LeftShift);
-	bool bLeftControlDown = GitPC->GetInputAnalogKeyState(EKeys::LeftControl);
+	float bLeftShiftDown = GitPC->GetInputAnalogKeyState(EKeys::LeftShift);
+	float bLeftControlDown = GitPC->GetInputAnalogKeyState(EKeys::LeftControl);
 
-	if (bLeftShiftDown)
+	if (bLeftShiftDown == 1.0f)
 	{		
 		int32 Index = GitPC->SelectedPawns.AddUnique(this);
 		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
 	}
-	else if (bLeftControlDown)
+	else if (bLeftControlDown == 1.0f)
 	{
 		int32 Count = GitPC->SelectedPawns.Remove(this);
 		if (Count > 0)
