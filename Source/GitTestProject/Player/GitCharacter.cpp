@@ -123,3 +123,13 @@ void AGitCharacter::MoveGitCharacterToDestination()
 		PRINTC("Wrong AI Controller (GitCharacter, MoveGitCharacterToDestination())", FColor::Red);
 	}
 }
+
+bool AGitCharacter::HasAssignedPanel()
+{
+	return AssignedPanel;
+}
+
+void AGitCharacter::AssignPanel()
+{
+	AssignedPanel = true;
+}
