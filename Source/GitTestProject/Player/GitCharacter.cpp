@@ -61,6 +61,7 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 	if (bLeftShiftDown == 1.0f)
 	{		
 		int32 Index = GitPC->SelectedPawns.AddUnique(this);
+
 		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
 	}
 	else if (bLeftControlDown == 1.0f)
@@ -75,9 +76,12 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 	{
 		GitPC->SelectedPawns.Empty();
 		int32 Index = GitPC->SelectedPawns.AddUnique(this);
+
 		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
 	}
-	
+
+ 	//Check the UI panels
+	GitPC->HighlightCharacterPanels(GitPC->SelectedPawns);	
 }
 
 void AGitCharacter::SetDestinationToMouseCursor()
