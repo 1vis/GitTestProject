@@ -80,7 +80,7 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
 	}
 
-	//Check the UI panels
+ 	//Check the UI panels
 	GitPC->HighlightCharacterPanels(GitPC->SelectedPawns);	
 }
 
