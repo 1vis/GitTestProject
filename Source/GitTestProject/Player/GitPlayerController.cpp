@@ -41,6 +41,9 @@ void AGitPlayerController::BeginPlay()
 void AGitPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (SelectBoxMode)
+		UpdateSelectionBoxData(DeltaTime);
 }
 
 void AGitPlayerController::SetupInputComponent()
@@ -48,6 +51,9 @@ void AGitPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();	
 
 	InputComponent->BindAction("MoveToDestination", IE_Released, this, &AGitPlayerController::MoveSelectedPawnToDestination);
+
+	InputComponent->BindAction("SelectionMode", IE_Pressed, this, &AGitPlayerController::StartSelectionMode);
+	InputComponent->BindAction("SelectionMode", IE_Released, this, &AGitPlayerController::StopSelectionMode);
 }
 
 void AGitPlayerController::MoveSelectedPawnToDestination()
@@ -81,4 +87,62 @@ void AGitPlayerController::MoveSelectedPawnToDestination()
 void AGitPlayerController::HighlightCharacterPanels(TArray<APawn*> SelectedActors)
 {
 	UpdateCharacterPanelsFunction.Broadcast(SelectedActors);
+}
+
+void AGitPlayerController::StartSelectionMode()
+{
+	SelectBoxMode = true;
+	GetMousePosition(SelectionBoxX, SelectionBoxY);
+
+}
+
+void AGitPlayerController::StopSelectionMode()
+{
+	SelectBoxMode = false;
+	SelectionBoxX = 0.0f;
+	SelectionBoxY = 0.0f;
+	SelectionBoxW = 0.0f;
+	SelectionBoxH = 0.0f;
+}
+
+void AGitPlayerController::UpdateSelectionBoxData(const float& DeltaTime)
+{
+	float tmpX = 0.0f;
+	float tmpY = 0.0f;
+
+	GetMousePosition(tmpX, tmpY);
+
+	SelectionBoxW = tmpX - SelectionBoxX;
+	SelectionBoxH = tmpY - SelectionBoxY;
+
+}
+
+void AGitPlayerController::SetSelectedActors(TArray<APawn*> SelectedActors)
+{
+	SelectedPawns = SelectedActors;
+}
+
+bool AGitPlayerController::IsInSelectionBox(APawn * SelectedActor)
+{
+
+	FVector position = GetHUD()->Project(SelectedActor->GetActorLocation());
+	float BoxW = SelectionBoxW;
+	float BoxH = SelectionBoxH;
+
+	float BoxX = SelectionBoxX;
+	float BoxY = SelectionBoxY;
+
+	if (BoxW < 0)
+	{
+		BoxX += BoxW;
+		BoxW *= -1.0f;
+	}
+
+	if (BoxH < 0)
+	{
+		BoxY += BoxH;
+		BoxH *= -1.0f;
+	}
+
+	return (position.X < BoxX + BoxW && position.X + 1.0f > BoxX && position.Y < BoxY + BoxH && position.Y + +1.0f > BoxY);
 }
