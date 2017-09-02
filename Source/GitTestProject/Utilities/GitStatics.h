@@ -24,6 +24,10 @@ public:
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", Category = "GitStatics"))
 	static class AGitPlayerController* GetGitPlayerController(const UObject* WorldContextObject, int32 Index = 0);
 
-	
+
+	//template<class Type>		
+	//static bool FindNextValidIndex(const TArray<Type>& Array, const int32 StartAtIndex, int32& OutIndex);
 	
 };
+
+

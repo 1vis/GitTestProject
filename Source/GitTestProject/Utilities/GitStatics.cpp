@@ -25,3 +25,33 @@ AGitPlayerController * UGitStatics::GetGitPlayerController(const UObject* WorldC
 	APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, Index);
 	return Cast<AGitPlayerController>(PC);
 }
+
+//template<class Type>
+//bool UGitStatics::FindNextValidIndex(const TArray<Type>& Array, const int32 StartAtIndex, int32& OutIndex)
+//{
+//	if (Array.Num() <= 0)
+//	{
+//		return false;
+//	}
+//	
+//	int32 CurrentIndex = StartAtIndex;
+//	while (Array.IsValidIndex(CurrentIndex) == false)
+//	{
+//		if (CurrentIndex < Waypoints.Num())
+//		{
+//			CurrentGoalIndex++;
+//		}
+//		else
+//		{
+//			CurrentGoalIndex = 0;
+//		}
+//
+//		if (CurrentIndex == IndexAtBeginning)
+//		{
+//			return false;			
+//		}
+//	}
+//
+//	OutIndex == CurrentIndex;
+//	return true;
+//}

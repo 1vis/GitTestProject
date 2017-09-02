@@ -9,6 +9,7 @@
 
 #define PRINT(Text) GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.0f, FColor(0, 166, 255), Text)
 #define PRINTC(Text, Color) GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.0f, Color, Text)
+#define PRINTCT(Text, Color, Time) GEngine->AddOnScreenDebugMessage(INDEX_NONE, Time, Color, Text)
 #define PRINT_INT(Integer) GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.0f, FColor(0, 166, 255), FString::FromInt(Integer))
 #define PRINT_FLOAT(Float) GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.0f, FColor(0, 166, 255), FString::SanitizeFloat(Float))
 
