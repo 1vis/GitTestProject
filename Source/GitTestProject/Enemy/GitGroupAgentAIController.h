@@ -14,6 +14,13 @@ enum class ETraverseDirection : uint8
 	TD_Backward UMETA(DisplayName = "Backward")	
 };
 
+UENUM(BlueprintType)
+enum class EPatrolType : uint8
+{
+	PT_PingPong 	UMETA(DisplayName = "PingPong"),
+	PT_Circular UMETA(DisplayName = "Circular")
+};
+
 /**
  * 
  */
@@ -24,9 +31,9 @@ class GITTESTPROJECT_API AGitGroupAgentAIController : public AAIController
 
 public:
 
-	// Patrols the waypoints in Ping Pong manner.
+	// Patrols the waypoints.
 	UFUNCTION(BlueprintCallable)
-	void Patrol(float AcceptanceRadius = 100.0f);
+	void Patrol(EPatrolType PatrolType = EPatrolType::PT_PingPong, float AcceptanceRadius = 100.0f);
 
 private:
 	UPROPERTY()

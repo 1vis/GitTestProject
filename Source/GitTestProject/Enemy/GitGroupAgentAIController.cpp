@@ -8,7 +8,7 @@
 #include "Utilities/GitCore.h"
 
 
-void AGitGroupAgentAIController::Patrol(float AcceptanceRadius /*= 100.0f*/)
+void AGitGroupAgentAIController::Patrol(EPatrolType PatrolType /*= EPatrolType::PT_PingPong*/, float AcceptanceRadius /*= 100.0f*/)
 {
 	AGitGroupAgent* GitGroupAgent = Cast<AGitGroupAgent>(GetPawn());
 
@@ -72,7 +72,7 @@ void AGitGroupAgentAIController::Patrol(float AcceptanceRadius /*= 100.0f*/)
 		}
 		// Remove invalid waypoint from the linked list.
 		GitGroupAgent->Waypoints.RemoveNode(Waypoint);
-	}	
+	}		
 
 	if (IsValid(CurrentWaypoint) == false)
 	{
@@ -89,39 +89,57 @@ void AGitGroupAgentAIController::Patrol(float AcceptanceRadius /*= 100.0f*/)
 	
 	const FVector AgentLocation = GitGroupAgent->GetActorLocation();
 	const FVector TargetLocation = CurrentWaypoint->GetActorLocation();
-	const float DistanceToTarget = UKismetMathLibrary::VSize(TargetLocation - AgentLocation);	
-	
-	if (DistanceToTarget <= AcceptanceRadius)
+	const float DistanceToTarget = UKismetMathLibrary::VSize(TargetLocation - AgentLocation);		
+	if (DistanceToTarget <= AcceptanceRadius + 50.0f)
 	{
 		if (GitGroupAgent->Waypoints.Num() == 1)
 		{
 			return;
 		}
 
-		if (CurrentTraverseDirection == ETraverseDirection::TD_Forward)
+		switch (PatrolType)
 		{
-			if (AWaypoint* NextWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode()->GetValue() : nullptr : nullptr)
+			case EPatrolType::PT_PingPong:
 			{
-				CurrentWaypoint = NextWaypoint;
+				if (CurrentTraverseDirection == ETraverseDirection::TD_Forward)
+				{
+					if (AWaypoint* NextWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode()->GetValue() : nullptr : nullptr)
+					{
+						CurrentWaypoint = NextWaypoint;
+					}
+					else
+					{
+						CurrentWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode()->GetValue() : nullptr : nullptr;
+						CurrentTraverseDirection = ETraverseDirection::TD_Backward;
+					}
+				}
+				else if (CurrentTraverseDirection == ETraverseDirection::TD_Backward)
+				{
+					if (AWaypoint* NextWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode()->GetValue() : nullptr : nullptr)
+					{
+						CurrentWaypoint = NextWaypoint;
+					}
+					else
+					{
+						CurrentWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode()->GetValue() : nullptr : nullptr;
+						CurrentTraverseDirection = ETraverseDirection::TD_Forward;
+					}
+				}
 			}
-			else
+			case EPatrolType::PT_Circular:
 			{
-				CurrentWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode()->GetValue() : nullptr : nullptr;
-				CurrentTraverseDirection = ETraverseDirection::TD_Backward;				
+				if (AWaypoint* NextWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode()->GetValue() : nullptr : nullptr)
+				{
+					CurrentWaypoint = NextWaypoint;
+				}
+				else
+				{
+					CurrentWaypoint = GitGroupAgent->Waypoints.GetHead()->GetValue();
+				}
 			}
 		}
-		else if (CurrentTraverseDirection == ETraverseDirection::TD_Backward)
-		{
-			if (AWaypoint* NextWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetPrevNode()->GetValue() : nullptr : nullptr)
-			{
-				CurrentWaypoint = NextWaypoint;
-			}
-			else
-			{
-				CurrentWaypoint = GitGroupAgent->Waypoints.FindNode(CurrentWaypoint) ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode() ? GitGroupAgent->Waypoints.FindNode(CurrentWaypoint)->GetNextNode()->GetValue() : nullptr : nullptr;
-				CurrentTraverseDirection = ETraverseDirection::TD_Forward;				
-			}
-		}		
+
+		
 	}	
 	
 	MoveToLocation(CurrentWaypoint->GetActorLocation(), AcceptanceRadius);
