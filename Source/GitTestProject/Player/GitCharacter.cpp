@@ -36,6 +36,11 @@ void AGitCharacter::BeginPlay()
 void AGitCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if ((!EnemyTarget && IsAttacking))
+	{
+		IsAttacking = false;
+	}
 }
 
 // Called to bind functionality to input
@@ -48,40 +53,44 @@ void AGitCharacter::NotifyActorOnReleased(FKey ButtonReleased)
 {
 	Super::NotifyActorOnReleased(ButtonReleased);
 
-	AGitPlayerController* GitPC = UGitStatics::GetGitPlayerController(this);
-	if (GitPC == nullptr)
+	if (Controllable)
 	{
-		PRINTC("PlayerController is not GitPlayerController. (GitCharacter, NotifyActorOnReleased)", FColor::Red);
-		return;
-	}
-
-	float bLeftShiftDown = GitPC->GetInputAnalogKeyState(EKeys::LeftShift);
-	float bLeftControlDown = GitPC->GetInputAnalogKeyState(EKeys::LeftControl);
-
-	if (bLeftShiftDown == 1.0f)
-	{		
-		int32 Index = GitPC->SelectedPawns.AddUnique(this);
-
-		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
-	}
-	else if (bLeftControlDown == 1.0f)
-	{
-		int32 Count = GitPC->SelectedPawns.Remove(this);
-		if (Count > 0)
+		AGitPlayerController* GitPC = UGitStatics::GetGitPlayerController(this);
+		if (GitPC == nullptr)
 		{
-			PRINTC(this->GetName() + " removed " + FString::FromInt(Count) + "x", FColor::Yellow);
-		}	
-	}
-	else
-	{
-		GitPC->SelectedPawns.Empty();
-		int32 Index = GitPC->SelectedPawns.AddUnique(this);
+			PRINTC("PlayerController is not GitPlayerController. (GitCharacter, NotifyActorOnReleased)", FColor::Red);
+			return;
+		}
 
-		PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
+		float bLeftShiftDown = GitPC->GetInputAnalogKeyState(EKeys::LeftShift);
+		float bLeftControlDown = GitPC->GetInputAnalogKeyState(EKeys::LeftControl);
+
+		if (bLeftShiftDown == 1.0f)
+		{		
+			int32 Index = GitPC->SelectedPawns.AddUnique(this);
+
+			PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
+		}
+		else if (bLeftControlDown == 1.0f)
+		{
+			int32 Count = GitPC->SelectedPawns.Remove(this);
+			if (Count > 0)
+			{
+				PRINTC(this->GetName() + " removed " + FString::FromInt(Count) + "x", FColor::Yellow);
+			}	
+		}
+		else
+		{
+			GitPC->SelectedPawns.Empty();
+			int32 Index = GitPC->SelectedPawns.AddUnique(this);
+
+			PRINTC(GitPC->SelectedPawns[Index]->GetName() + " selected.", FColor::Yellow);
+		}
+
+ 		//Check the UI panels
+		GitPC->HighlightCharacterPanels(GitPC->SelectedPawns);	
 	}
 
- 	//Check the UI panels
-	GitPC->HighlightCharacterPanels(GitPC->SelectedPawns);	
 }
 
 void AGitCharacter::SetDestinationToMouseCursor()
@@ -126,6 +135,15 @@ void AGitCharacter::MoveGitCharacterToDestination()
 	{
 		PRINTC("Wrong AI Controller (GitCharacter, MoveGitCharacterToDestination())", FColor::Red);
 	}
+
+	if (IsAttacking)
+	{
+		IsAttacking = false;
+		EnemyTarget = nullptr;
+
+		if (AbleToFire)
+			AbleToFire = false;
+	}
 }
 
 bool AGitCharacter::HasAssignedPanel()
@@ -136,4 +154,20 @@ bool AGitCharacter::HasAssignedPanel()
 void AGitCharacter::AssignPanel()
 {
 	AssignedPanel = true;
+}
+
+void AGitCharacter::SetEnemyTarget(APawn* EnemyPawn)
+{
+	IsAttacking = true;
+	EnemyTarget = EnemyPawn;
+}
+
+void AGitCharacter::HandleDamage(float Damage)
+{
+	CharacterHealth -= Damage;
+
+	if (CharacterHealth <= 0.0f)
+	{
+		IsDead = true;
+	}
 }
