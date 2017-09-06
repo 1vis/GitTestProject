@@ -144,6 +144,12 @@ void AGitCharacter::MoveGitCharacterToDestination()
 		if (AbleToFire)
 			AbleToFire = false;
 	}
+
+	if (IsInteracting)
+	{
+		IsInteracting = false;
+		TargetItem = false;
+	}
 }
 
 bool AGitCharacter::HasAssignedPanel()
@@ -170,4 +176,10 @@ void AGitCharacter::HandleDamage(float Damage)
 	{
 		IsDead = true;
 	}
+}
+
+void AGitCharacter::SetInteractionItem(AActor* Item)
+{
+	IsInteracting = true;
+	TargetItem = Item;
 }

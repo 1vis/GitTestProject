@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameItem.h"
 #include "GitPlayerController.generated.h"
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateThePanelsDelegate, const TArray<APawn*>&, SelectedChar);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FObjectUnderTheCursor, AActor*, ActorUnderCursor);
@@ -49,8 +50,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetAttackPoint(APawn* SelectedEnemy);
 
+	/* 6.08*/
 	UFUNCTION(BlueprintCallable)
 	bool IsActionNeeded(AActor* HitActor);
+
+	UFUNCTION(BlueprintCallable)
+		void setInteractionPointForGroup(AActor* InteractActor);
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

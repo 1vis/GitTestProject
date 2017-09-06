@@ -87,7 +87,6 @@ void AGitPlayerController::MoveSelectedPawnToDestination()
 	FHitResult TraceHitResult;
 	if (GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult))
 	{
-
 		if (IsActionNeeded(TraceHitResult.Actor.Get()) && SelectedPawns.Num() > 0)
 		{
 			CheckTheObjectForAction.Broadcast(TraceHitResult.Actor.Get());
@@ -100,11 +99,27 @@ bool AGitPlayerController::IsActionNeeded(AActor* HitActor)
 {
 	if (HitActor)
 	{
-		return HitActor->IsA(APawn::StaticClass());
+		return ((HitActor->IsA(APawn::StaticClass()))||(HitActor->IsA(AGameItem::StaticClass())));
 	}
 	else
 	{
 		return false;
+	}
+
+}
+
+void AGitPlayerController::setInteractionPointForGroup(AActor * InteractActor)
+{
+	for (const auto& Pawn : SelectedPawns)
+	{
+		if (Pawn)
+		{
+			AGitCharacter* GitCharacter = Cast<AGitCharacter>(Pawn);
+			if (GitCharacter)
+			{
+				GitCharacter->SetInteractionItem(InteractActor);
+			}
+		}
 	}
 }
 

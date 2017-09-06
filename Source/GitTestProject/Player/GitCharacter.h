@@ -76,6 +76,25 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsDead = false;
 
+	/* 06.08*/
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float LootRadius = 100.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool IsInteracting = false;
+
+	UPROPERTY(BlueprintReadWrite)
+		AActor* TargetItem = nullptr;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool CanAttack = false;
+
+	UFUNCTION(BlueprintCallable)
+	void SetInteractionItem(AActor* Item);
+
+	/**/
+
 private:	
 	FVector Destination;	
 
