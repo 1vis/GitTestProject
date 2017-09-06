@@ -6,7 +6,7 @@
 #include "AIController.h" 
 #include "GitEnemyAIController.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FPointOfInterest
 {
 	GENERATED_BODY()
@@ -23,7 +23,10 @@ struct FPointOfInterest
 		Duration = NewDuration;
 	}
 
+	UPROPERTY(BlueprintReadWrite)
 	FVector Location;
+
+	UPROPERTY(BlueprintReadWrite)
 	float Duration;
 };
 
@@ -34,11 +37,14 @@ UCLASS()
 class GITTESTPROJECT_API AGitEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
 public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintPure)
-	bool HasLOS(AActor* ToActor);
+	bool HasLOS(const AActor* ToActor);
 
 	// @param Duration - How long will Pawn remember this position, in seconds.
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add POI To Memory"))
@@ -47,6 +53,14 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Remove POI From Memory"))
 	void RemovePOIFromMemory(FVector LocationToRemove, float Tolerance = 100.0f);
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get POIs From Memory"))
+	TArray<FPointOfInterest> GetPOIsMemory() const;
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Last POI In Memory"))
+	FVector GetLastPOIInMemory(bool& bArrayIsEmpty) const;
+
+	UFUNCTION(BlueprintPure)
+	AActor* SelectBestTarget(const TArray<AActor*>& PerceivedActors);
 
 private:
 	UPROPERTY()
