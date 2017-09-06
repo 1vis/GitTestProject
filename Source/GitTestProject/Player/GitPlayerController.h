@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "GitPlayerController.generated.h"
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateThePanelsDelegate, const TArray<APawn*>&, SelectedChar);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FObjectUnderTheCursor, AActor*, ActorUnderCursor);
 /**
  * 
  */
@@ -45,6 +46,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsInSelectionBox(APawn* SelectedActor);
 
+	UFUNCTION(BlueprintCallable)
+	void SetAttackPoint(APawn* SelectedEnemy);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsActionNeeded(AActor* HitActor);
+
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class ACameraBase* ActiveCamera = nullptr;	
@@ -54,6 +61,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FUpdateThePanelsDelegate UpdateCharacterPanelsFunction;
+
+	UPROPERTY(BlueprintAssignable)
+	FObjectUnderTheCursor CheckTheObjectForAction;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool SelectBoxMode = false;

@@ -82,6 +82,45 @@ void AGitPlayerController::MoveSelectedPawnToDestination()
 			PRINTC("No pawn is selected. (GitPlayerController, MoveSelectedPawnToDestination)", FColor::Red);
 		}
 	}
+
+	/*Check if it hits something*/
+	FHitResult TraceHitResult;
+	if (GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult))
+	{
+
+		if (IsActionNeeded(TraceHitResult.Actor.Get()) && SelectedPawns.Num() > 0)
+		{
+			CheckTheObjectForAction.Broadcast(TraceHitResult.Actor.Get());
+		}
+
+	}
+}
+
+bool AGitPlayerController::IsActionNeeded(AActor* HitActor)
+{
+	if (HitActor)
+	{
+		return HitActor->IsA(APawn::StaticClass());
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void AGitPlayerController::SetAttackPoint(APawn* SelectedEnemy)
+{
+	for (const auto& Pawn : SelectedPawns)
+	{
+		if (Pawn)
+		{
+			AGitCharacter* GitCharacter = Cast<AGitCharacter>(Pawn);
+			if (GitCharacter)
+			{
+				GitCharacter->SetEnemyTarget(SelectedEnemy);
+			}
+		}
+	}
 }
 
 void AGitPlayerController::HighlightCharacterPanels(TArray<APawn*> SelectedActors)

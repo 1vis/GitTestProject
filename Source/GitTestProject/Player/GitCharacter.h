@@ -43,6 +43,39 @@ public:
 
 	void MoveGitCharacterToDestination();	
 
+	UFUNCTION(BlueprintCallable)
+	void HandleDamage(float Damage);
+
+	UFUNCTION(BlueprintCallable)
+	void SetEnemyTarget(APawn* EnemyPawn);
+
+	UPROPERTY(BlueprintReadWrite)
+	bool AbleToFire = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float WeaponRadius = 5.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float AttackSpeed = 3.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CharacterHealth = 100.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsAttacking = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool InBattleStance = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	APawn* EnemyTarget = nullptr;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool Controllable = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsDead = false;
+
 private:	
 	FVector Destination;	
 
