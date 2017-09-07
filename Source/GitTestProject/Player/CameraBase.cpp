@@ -16,16 +16,16 @@ ACameraBase::ACameraBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->AttachToComponent(SpringArm, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	Camera->AttachToComponent(SpringArm, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));	
 }
 
 // Called when the game starts or when spawned
 void ACameraBase::BeginPlay()
-{
+{	
 	Super::BeginPlay();	
-
+	
 	FRotator ActorRotation = GetActorRotation();
 	CorrectActorRotation();
 	SetCameraPitch(ActorRotation.Pitch);
