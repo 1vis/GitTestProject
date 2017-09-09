@@ -93,7 +93,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetInteractionItem(AActor* Item);
 
-	/**/
+	/* 9.09*/
+	UPROPERTY(BlueprintReadWrite)
+	bool actuallyFired = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool FireFormation = false;
 
 private:	
 	FVector Destination;	
