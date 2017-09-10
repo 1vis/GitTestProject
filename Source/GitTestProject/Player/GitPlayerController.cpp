@@ -179,6 +179,11 @@ void AGitPlayerController::SetSelectedActors(TArray<APawn*> SelectedActors)
 bool AGitPlayerController::IsInSelectionBox(APawn * SelectedActor)
 {
 
+	AGitCharacter* GitCharacter = Cast<AGitCharacter>(SelectedActor);
+
+	if (GitCharacter->IsDead)
+		return false;
+
 	FVector position = GetHUD()->Project(SelectedActor->GetActorLocation());
 	float BoxW = SelectionBoxW;
 	float BoxH = SelectionBoxH;
