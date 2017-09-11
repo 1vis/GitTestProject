@@ -27,7 +27,7 @@ bool AGitEnemyAIController::HasLOS(const AActor* ToActor)
 	if (ToActor == nullptr)
 	{
 		return false;
-	}
+	}	
 
 	FVector Start = GetPawn()->GetActorLocation();
 	FVector End = ToActor->GetActorLocation();
