@@ -24,7 +24,7 @@ void AGitEnemyAIController::Tick(float DeltaTime)
 
 bool AGitEnemyAIController::HasLOS(const AActor* ToActor)
 {
-	if (ToActor == nullptr)
+	if (ToActor->IsValidLowLevel() == false || IsValid(ToActor) == false)
 	{
 		return false;
 	}	
