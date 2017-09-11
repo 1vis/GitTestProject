@@ -99,21 +99,36 @@ void ACameraBase::DoCameraMovement(const float& DeltaTime)
 
 void ACameraBase::MoveCameraX(float Value)
 {
+	if (LockInput)
+	{
+		return;
+	}
+
 	CameraMovementVector.X =  Value;
 }
 
 void ACameraBase::MoveCameraY(float Value)
 {
+	if (LockInput)
+	{
+		return;
+	}
+
 	CameraMovementVector.Y =  Value;
 }
 
 void ACameraBase::ZoomCamera(float Value)
 {
+	if (LockInput)
+	{
+		return;
+	}
+
 	CameraZoom = CameraZoomSpeed * Value;
 }
 
 void ACameraBase::BecomeViewTarget(APlayerController * PC)
-{
+{	
 	PlayerController = PC;
 }
 
@@ -129,7 +144,12 @@ void ACameraBase::UpdateCamera()
 	if(!PlayerController)
 	{
 		return;
-	}	
+	}
+
+	if (LockInput)
+	{
+		return;
+	}
 	
 	if(GitPC->SelectedPawns.Num() > 0)
 	{

@@ -108,6 +108,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float CameraHighestZoomValue = 1100.0f;
 
+	UPROPERTY(BLueprintReadWrite, EditAnywhere)
+	bool LockInput = false;
+
 private:
 	bool bLockCameraToPlayer = false;	
 };

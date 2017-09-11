@@ -35,7 +35,7 @@ void AGitPlayerController::BeginPlay()
 		}	
 	}
 
-	SetViewTarget(ActiveCamera);
+	//SetViewTarget(ActiveCamera);
 }
 
 void AGitPlayerController::Tick(float DeltaTime)
