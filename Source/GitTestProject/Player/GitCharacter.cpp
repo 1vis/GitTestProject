@@ -164,8 +164,11 @@ void AGitCharacter::AssignPanel()
 
 void AGitCharacter::SetEnemyTarget(APawn* EnemyPawn)
 {
-	IsAttacking = true;
-	EnemyTarget = EnemyPawn;
+	if (EnemyTarget != EnemyPawn)
+	{
+		IsAttacking = true;
+		EnemyTarget = EnemyPawn;
+	}
 }
 
 void AGitCharacter::HandleDamage(float Damage)
