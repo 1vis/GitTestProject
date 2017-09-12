@@ -66,6 +66,11 @@ void ACameraBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	DoCameraMovement(DeltaTime);
+
+	FVector CurrentLocation = GetActorLocation();
+	float DesiredX = FMath::Clamp(CurrentLocation.X, -25835.226563f, 26006.773438f);
+	float DesiredY = FMath::Clamp(CurrentLocation.Y, -25856.558594f, 25643.109375f);
+	SetActorLocation(FVector(DesiredX, DesiredY, CurrentLocation.Z));
 }
 
 void ACameraBase::DoCameraMovement(const float& DeltaTime)
